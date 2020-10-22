@@ -1,0 +1,5 @@
+#!/bin/bash
+set -x
+docker rm -f `docker ps -aq`
+docker-compose -f docker-compose.yml up -d --force-recreate
+docker exec -it $(docker ps | grep api | awk '{print $1}') /bin/sh;

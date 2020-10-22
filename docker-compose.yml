@@ -1,0 +1,29 @@
+version: '2'
+services:
+  api:
+    image: node:alpine
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/api
+    hostname: api
+    links:
+      - postgres_service:api_postgres
+    command: sh
+    stdin_open: true
+    tty: true
+  redis:
+    image: redis
+    ports:
+     - "6379:6379"
+  postgres_service:
+    image: postgres:9.5
+    ports:
+     - "5432:5432"
+    environment:
+      - POSTGRES_USER=unicorn
+      - POSTGRES_PASSWORD=magical
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./data/db/postgres:/var/lib/postgresql/data/pgdata
+      - ../scripts/postgres:/docker-entrypoint-initdb.d
